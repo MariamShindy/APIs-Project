@@ -16,6 +16,10 @@ namespace Talabat.Infrastructure.Data
             
         }
 
+		protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+		{
+			optionsBuilder.UseLazyLoadingProxies(true);
+		}
 		protected override void OnModelCreating(ModelBuilder modelBuilder)
 		{
 			modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
