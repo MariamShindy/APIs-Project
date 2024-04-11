@@ -34,7 +34,8 @@ namespace Talabat.APIs
 			var loggerFactory = services.GetRequiredService<ILoggerFactory>();
 			try
 			{
-				await _dbContext.Database.MigrateAsync(); 
+				await _dbContext.Database.MigrateAsync();
+				await StoreContextSeed.SeedAsync(_dbContext);
 			}
 			catch (Exception ex)
 			{
