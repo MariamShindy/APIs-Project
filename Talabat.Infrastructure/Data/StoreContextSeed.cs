@@ -45,21 +45,21 @@ namespace Talabat.Infrastructure.Data
 					await _dbContext.SaveChangesAsync();
 				}
 			}
-			//if (_dbContext.Products.Count() == 0)
-			//{
-			//	var productsData = File.ReadAllText("../Talabat.Infrastructure/Data/DataSeed/categories.json");
-			//	var products = JsonSerializer.Deserialize<List<Product>>(productsData);
+			if (_dbContext.Products.Count() == 0)
+			{
+				var productsData = File.ReadAllText("../Talabat.Infrastructure/Data/DataSeed/products.json");
+				var products = JsonSerializer.Deserialize<List<Product>>(productsData);
 
-			//	if (products?.Count > 0)
-			//	{
+				if (products?.Count > 0)
+				{
 
-			//		foreach (var product in products)
-			//		{
-			//			_dbContext.Set<Product>().Add(product);
-			//		}
-			//		await _dbContext.SaveChangesAsync();
-			//	}
-			//}
+					foreach (var product in products)
+					{
+						_dbContext.Set<Product>().Add(product);
+					}
+					await _dbContext.SaveChangesAsync();
+				}
+			}
 		}
 	}
 }
