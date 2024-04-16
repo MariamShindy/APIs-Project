@@ -28,8 +28,7 @@ namespace Talabat.APIs
 			}
 			);
 			webApplicationBuilder.Services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
-			webApplicationBuilder.Services.AddAutoMapper(M => M.AddProfile(new MappingProfiles()));
-			//webApplicationBuilder.Services.AddAutoMapper(typeof(MappingProfiles));
+			webApplicationBuilder.Services.AddAutoMapper(typeof(MappingProfiles));
 			#endregion
 
 			var app = webApplicationBuilder.Build();
@@ -58,6 +57,7 @@ namespace Talabat.APIs
 			}
 
 			app.UseHttpsRedirection();
+			app.UseStaticFiles();
 
 			app.MapControllers(); 
 			#endregion
