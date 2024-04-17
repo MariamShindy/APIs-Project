@@ -6,6 +6,7 @@ using Microsoft.EntityFrameworkCore;
 using System.Net;
 using System.Text.Json;
 using Talabat.APIs.Errors;
+using Talabat.APIs.Extensions;
 using Talabat.APIs.Helpers;
 using Talabat.APIs.Middlewares;
 using Talabat.Core.Repsitories.Contract;
@@ -25,33 +26,16 @@ namespace Talabat.APIs
 
 			//Register required web API's services to the dependency injection container.
 			webApplicationBuilder.Services.AddControllers();
-			
+
 			// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
-			webApplicationBuilder.Services.AddEndpointsApiExplorer();
-			webApplicationBuilder.Services.AddSwaggerGen();
+			webApplicationBuilder.Services.AddSwaggerService();
+
 			webApplicationBuilder.Services.AddDbContext<StoreContext>(options =>
 			{
 				options.UseSqlServer(webApplicationBuilder.Configuration.GetConnectionString("DefaultConnection"));
 			}
 			);
-			webApplicationBuilder.Services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
-			webApplicationBuilder.Services.AddAutoMapper(typeof(MappingProfiles));
-
-			webApplicationBuilder.Services.Configure<ApiBehaviorOptions>(options =>
-			{
-				options.InvalidModelStateResponseFactory = (actionContext) =>
-				{
-					var errors = actionContext.ModelState.Where(p => p.Value.Errors.Count > 0)
-														 .SelectMany(p => p.Value.Errors)
-														 .Select(e => e.ErrorMessage).ToList();
-					var response = new ApiValidationErrorResponse()
-					{
-						Errors = errors
-					};
-				return new BadRequestObjectResult(response);
-				};
-			}
-			);
+			webApplicationBuilder.Services.AddApplicationsService();
 			#endregion
 
 
@@ -98,8 +82,7 @@ namespace Talabat.APIs
 			// Configure the HTTP request pipeline.
 			if (app.Environment.IsDevelopment())
 			{
-				app.UseSwagger();
-				app.UseSwaggerUI();
+				app.UseSwaggerMiddleware();
 			}
 			app.UseStatusCodePagesWithReExecute("/errors/{0}");
 			app.UseHttpsRedirection();
