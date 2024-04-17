@@ -18,7 +18,7 @@ namespace Talabat.APIs.Errors
 				400 => "A bad request , you have made",
 				401 => "Authorized , you are not",
 				404 => "Rescource was not found",
-				500 => "Errors are the path to the dark side . Error lead to anger . Anger lead to hate . hate lead to career change"
+				500 => "Errors are the path to the dark side . Error lead to anger . Anger lead to hate . hate lead to career change",
 				_ => null
 			};
 		} 
