@@ -1,5 +1,6 @@
 
 using Azure;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Net;
@@ -100,7 +101,7 @@ namespace Talabat.APIs
 				app.UseSwagger();
 				app.UseSwaggerUI();
 			}
-
+			app.UseStatusCodePagesWithReExecute("/errors/{0}");
 			app.UseHttpsRedirection();
 			app.UseStaticFiles();
 
