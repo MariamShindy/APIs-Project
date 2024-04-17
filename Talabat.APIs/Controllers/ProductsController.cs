@@ -27,6 +27,9 @@ namespace Talabat.APIs.Controllers
 			var products = await _productsRepo.GetAllWithSpecAsync(spec);
 			return Ok(_mapper.Map<IEnumerable<Product>, IEnumerable<ProductToReturnDto>>(products));
 		}
+		[ProducesResponseType(typeof(ProductToReturnDto),StatusCodes.Status200OK)]
+		[ProducesResponseType(typeof(ApiResponse), StatusCodes.Status404NotFound)]
+
 		[HttpGet("{id}")]
 		public async Task<ActionResult<ProductToReturnDto>> GetProduct(int id)
 		{
