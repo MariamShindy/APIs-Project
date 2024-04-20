@@ -21,7 +21,8 @@ namespace Talabat.Infrastructure
 				query = query.OrderBy(spec.OrderBy);
 			else if (spec.OrderByDesc is not null)
 				query = query.OrderByDescending(spec.OrderByDesc);
-
+			if (spec.IsPaginationEnabled)
+				query = query.Skip(spec.Skip).Take(spec.Take);
 			//Include expressions 
 			//1) P => P.Brand
 			//2) P => P.Category 
