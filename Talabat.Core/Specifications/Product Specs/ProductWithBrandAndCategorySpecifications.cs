@@ -3,11 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Talabat.Core.Entities;
+using Talabat.Core.Entities.Product;
 
 namespace Talabat.Core.Specifications.Product_Specs
 {
-	public class ProductWithBrandAndCategorySpecifications : BaseSpecifications<Product>
+    public class ProductWithBrandAndCategorySpecifications : BaseSpecifications<Product>
 	{
         //This constructor will be used to create an object that will be used to get all products
         public ProductWithBrandAndCategorySpecifications(ProductSpecParams specParams) : base(P =>

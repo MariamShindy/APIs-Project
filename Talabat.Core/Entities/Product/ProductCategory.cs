@@ -4,11 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Talabat.Core.Entities
+namespace Talabat.Core.Entities.Product
 {
-	public class ProductBrand:BaseEntity
-	{
+    public class ProductCategory : BaseEntity
+    {
         public string Name { get; set; }
-		//public ICollection<Product> Products { get; set; } = new HashSet<Product>();
     }
 }

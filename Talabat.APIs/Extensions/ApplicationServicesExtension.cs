@@ -3,11 +3,12 @@ using Microsoft.AspNetCore.Mvc;
 using Talabat.APIs.Errors;
 using Talabat.APIs.Helpers;
 using Talabat.Core.Repsitories.Contract;
-using Talabat.Infrastructure;
+using Talabat.Infrastructure.BasketRepository;
+using Talabat.Infrastructure.GenericRepoistory;
 
 namespace Talabat.APIs.Extensions
 {
-	public static class ApplicationServicesExtension
+    public static class ApplicationServicesExtension
 	{
 		public static IServiceCollection AddApplicationsService(this IServiceCollection services)
 		{

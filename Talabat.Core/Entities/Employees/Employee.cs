@@ -4,11 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Talabat.Core.Entities
+namespace Talabat.Core.Entities.Employees
 {
-	public class Employee : BaseEntity
-	{
-        public String  Name { get; set; }
+    public class Employee : BaseEntity
+    {
+        public string Name { get; set; }
         public decimal Salary { get; set; }
         public int? Age { get; set; }
         public Department Department { get; set; }

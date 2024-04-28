@@ -1,18 +1,11 @@
-
-using Azure;
-using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using StackExchange.Redis;
 using System.Net;
 using System.Text.Json;
 using Talabat.APIs.Errors;
 using Talabat.APIs.Extensions;
-using Talabat.APIs.Helpers;
-using Talabat.APIs.Middlewares;
-using Talabat.Core.Repsitories.Contract;
-using Talabat.Infrastructure;
-using Talabat.Infrastructure.Data;
+using Talabat.Infrastructure._Data;
+using Talabat.Infrastructure._Identity;
 
 namespace Talabat.APIs
 {
@@ -36,6 +29,10 @@ namespace Talabat.APIs
 				options.UseSqlServer(webApplicationBuilder.Configuration.GetConnectionString("DefaultConnection"));
 			}
 			);
+			webApplicationBuilder.Services.AddDbContext<ApplicationIdentityDbContext>(options =>
+			{
+				options.UseSqlServer(webApplicationBuilder.Configuration.GetConnectionString("IdentityConnection"));
+			});
 			webApplicationBuilder.Services.AddSingleton<IConnectionMultiplexer>((serviceProvider) =>
 			{
 				var connection = webApplicationBuilder.Configuration.GetConnectionString("Redis");
@@ -43,6 +40,7 @@ namespace Talabat.APIs
 			}
 			);
 			webApplicationBuilder.Services.AddApplicationsService();
+
 			#endregion
 
 
@@ -51,12 +49,16 @@ namespace Talabat.APIs
 			using var scope = app.Services.CreateScope();
 			var services = scope.ServiceProvider;
 			var _dbContext = services.GetRequiredService<StoreContext>();
+			var _IdentityDbContext = services.GetRequiredService<ApplicationIdentityDbContext>();
 			var loggerFactory = services.GetRequiredService<ILoggerFactory>();
 			var logger = loggerFactory.CreateLogger<Program>();
 			try
 			{
-				await _dbContext.Database.MigrateAsync();
+				await _dbContext.Database.MigrateAsync(); //update database
 				await StoreContextSeed.SeedAsync(_dbContext);
+
+				await _IdentityDbContext.Database.MigrateAsync(); //update database
+
 			}
 			catch (Exception ex)
 			{

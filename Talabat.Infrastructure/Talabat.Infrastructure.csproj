@@ -15,4 +15,10 @@
     <ProjectReference Include="..\Talabat.Core\Talabat.Core.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="_Identity\Config\" />
+    <Folder Include="_Identity\DataSeed\" />
+    <Folder Include="_Identity\Migrations\" />
+  </ItemGroup>
+
 </Project>

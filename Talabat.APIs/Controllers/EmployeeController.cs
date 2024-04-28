@@ -1,13 +1,13 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Talabat.APIs.Errors;
-using Talabat.Core.Entities;
+using Talabat.Core.Entities.Employees;
 using Talabat.Core.Repsitories.Contract;
 using Talabat.Core.Specifications.Employee_Specs;
 
 namespace Talabat.APIs.Controllers
 {
-	public class EmployeeController : BaseApiController
+    public class EmployeeController : BaseApiController
 	{
 		private readonly IGenericRepository<Employee> _employeeRepository;
 
