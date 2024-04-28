@@ -14,7 +14,7 @@ using Talabat.Core.Services.Contract;
 
 namespace Talabat.Service.AuthService
 {
-	internal class AuthService : IAuthService
+	public class AuthService : IAuthService
 	{
 		private readonly IConfiguration _configuration;
 
