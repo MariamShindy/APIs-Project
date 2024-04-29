@@ -26,7 +26,10 @@ namespace Talabat.APIs
 			// Add services to the dependency injection container.
 
 			//Register required web API's services to the dependency injection container.
-			webApplicationBuilder.Services.AddControllers();
+			webApplicationBuilder.Services.AddControllers().AddNewtonsoftJson(options =>
+			{
+				options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore;
+			});
 
 			// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 			webApplicationBuilder.Services.AddSwaggerService();
