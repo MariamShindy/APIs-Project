@@ -13,8 +13,8 @@ namespace Talabat.Core.Entities.OrderAggregate
 		public DateTimeOffset OrderDate { get; set; } = DateTimeOffset.UtcNow;
 		public OrderStatus Status { get; set; } = OrderStatus.Pending;
 		public Address ShippingAddress { get; set; } = null!;
-        public int DeliveryMethodId { get; set; } //Foreign key 
-        public  DeliveryMethod DeliveryMethod { get; set; } //Navigational property one
+ //      public int? DeliveryMethodId { get; set; } //Foreign key 
+        public  DeliveryMethod? DeliveryMethod { get; set; } //Navigational property one
 		public ICollection<OrderItem> Items { get; set;} = new HashSet<OrderItem>();
         public decimal Subtotal { get; set; } //Total cost - shipping fees
         public String PaymentIntentId { get; set; } = string.Empty;
