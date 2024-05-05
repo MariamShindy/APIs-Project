@@ -1,13 +1,22 @@
-﻿using Microsoft.AspNetCore.Builder;
+﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
 using Talabat.APIs.Errors;
 using Talabat.APIs.Helpers;
+using Talabat.Core.Entities.Identity;
 using Talabat.Core.Repsitories.Contract;
-using Talabat.Infrastructure;
+using Talabat.Core.Services.Contract;
+using Talabat.Infrastructure._Identity;
+using Talabat.Infrastructure.BasketRepository;
+using Talabat.Infrastructure.GenericRepoistory;
+using Talabat.Service.AuthService;
 
 namespace Talabat.APIs.Extensions
 {
-	public static class ApplicationServicesExtension
+    public static class ApplicationServicesExtension
 	{
 		public static IServiceCollection AddApplicationsService(this IServiceCollection services)
 		{
@@ -30,6 +39,30 @@ namespace Talabat.APIs.Extensions
 				};
 			}
 			);
+			return services;
+		}
+		public static IServiceCollection AddAuthServices(this IServiceCollection services ,IConfiguration configuration)
+		{
+			services.AddIdentity<ApplicationUser, IdentityRole>().AddEntityFrameworkStores<ApplicationIdentityDbContext>();
+			services.AddScoped(typeof(IAuthService), typeof(AuthService));
+			services.AddAuthentication(options =>
+			{
+				options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+				options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+			}).AddJwtBearer(/*JwtBearerDefaults.AuthenticationScheme,*/ options =>
+			{
+				options.TokenValidationParameters = new TokenValidationParameters()
+				{
+					ValidateIssuer = true,
+					ValidIssuer = configuration["JWT:ValidIssuer"],
+					ValidateAudience = true,
+					ValidAudience = configuration["JWT:ValidAuidence"],
+					ValidateIssuerSigningKey = true,
+					IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["JWT:AuthKey"] ?? string.Empty)),
+					ValidateLifetime = true,
+					ClockSkew = TimeSpan.Zero
+				};
+			});
 			return services;
 		}
 	}

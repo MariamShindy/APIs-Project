@@ -1,18 +1,18 @@
-
-using Azure;
-using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 using StackExchange.Redis;
 using System.Net;
+using System.Text;
 using System.Text.Json;
 using Talabat.APIs.Errors;
 using Talabat.APIs.Extensions;
-using Talabat.APIs.Helpers;
-using Talabat.APIs.Middlewares;
-using Talabat.Core.Repsitories.Contract;
-using Talabat.Infrastructure;
-using Talabat.Infrastructure.Data;
+using Talabat.Core.Entities.Identity;
+using Talabat.Core.Services.Contract;
+using Talabat.Infrastructure._Data;
+using Talabat.Infrastructure._Identity;
+using Talabat.Service.AuthService;
 
 namespace Talabat.APIs
 {
@@ -26,7 +26,10 @@ namespace Talabat.APIs
 			// Add services to the dependency injection container.
 
 			//Register required web API's services to the dependency injection container.
-			webApplicationBuilder.Services.AddControllers();
+			webApplicationBuilder.Services.AddControllers().AddNewtonsoftJson(options =>
+			{
+				options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore;
+			});
 
 			// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 			webApplicationBuilder.Services.AddSwaggerService();
@@ -36,13 +39,19 @@ namespace Talabat.APIs
 				options.UseSqlServer(webApplicationBuilder.Configuration.GetConnectionString("DefaultConnection"));
 			}
 			);
+			webApplicationBuilder.Services.AddDbContext<ApplicationIdentityDbContext>(options =>
+			{
+				options.UseSqlServer(webApplicationBuilder.Configuration.GetConnectionString("IdentityConnection"));
+			});
 			webApplicationBuilder.Services.AddSingleton<IConnectionMultiplexer>((serviceProvider) =>
 			{
 				var connection = webApplicationBuilder.Configuration.GetConnectionString("Redis");
 				return ConnectionMultiplexer.Connect(connection);
 			}
 			);
+			webApplicationBuilder.Services.AddAuthServices(webApplicationBuilder.Configuration);
 			webApplicationBuilder.Services.AddApplicationsService();
+
 			#endregion
 
 
@@ -51,12 +60,18 @@ namespace Talabat.APIs
 			using var scope = app.Services.CreateScope();
 			var services = scope.ServiceProvider;
 			var _dbContext = services.GetRequiredService<StoreContext>();
+			var _IdentityDbContext = services.GetRequiredService<ApplicationIdentityDbContext>();
 			var loggerFactory = services.GetRequiredService<ILoggerFactory>();
 			var logger = loggerFactory.CreateLogger<Program>();
 			try
 			{
-				await _dbContext.Database.MigrateAsync();
+				await _dbContext.Database.MigrateAsync(); //update database
 				await StoreContextSeed.SeedAsync(_dbContext);
+
+				await _IdentityDbContext.Database.MigrateAsync(); //update database
+				var userManager = services.GetRequiredService<UserManager<ApplicationUser>>();
+				await ApplicationIdentityContextSeed.SeedUsersAsync(userManager);
+
 			}
 			catch (Exception ex)
 			{
