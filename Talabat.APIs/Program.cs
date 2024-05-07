@@ -71,7 +71,6 @@ namespace Talabat.APIs
 				await _IdentityDbContext.Database.MigrateAsync(); //update database
 				var userManager = services.GetRequiredService<UserManager<ApplicationUser>>();
 				await ApplicationIdentityContextSeed.SeedUsersAsync(userManager);
-
 			}
 			catch (Exception ex)
 			{
