@@ -11,11 +11,11 @@ namespace Talabat.Core.Entities.OrderAggregate
 	{
         private Order()
         {}
-        public Order(string buyerEmail, Address shippingAddress, int? deliveryMethodId, ICollection<OrderItem> items, decimal subtotal)
+        public Order(string buyerEmail, Address shippingAddress, DeliveryMethod deliveryMethod, ICollection<OrderItem> items, decimal subtotal)
 		{
 			BuyerEmail = buyerEmail;
 			ShippingAddress = shippingAddress;
-			DeliveryMethodId = deliveryMethodId;
+			DeliveryMethod= deliveryMethod;
 			Items = items;
 			Subtotal = subtotal;
 		}

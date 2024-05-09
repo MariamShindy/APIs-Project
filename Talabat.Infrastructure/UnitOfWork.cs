@@ -14,7 +14,7 @@ using Talabat.Infrastructure.GenericRepoistory;
 
 namespace Talabat.Infrastructure
 {
-	internal class UnitOfWork : IUnitOfWork
+	public class UnitOfWork : IUnitOfWork
 	{
 		private readonly StoreContext _dbContext;
         private Hashtable _repositories;
@@ -52,14 +52,11 @@ namespace Talabat.Infrastructure
             return _repositories[key] as IGenericRepository<TEntity>;
 		}
         public async Task<int> CompleteAsync()
-		{
-            return await _dbContext.SaveChangesAsync();
-		}
+	       => await _dbContext.SaveChangesAsync();
 
 		public async ValueTask DisposeAsync()
-		{
-            return await _dbContext.DisposeAsync();
-		}
+            => await _dbContext.DisposeAsync();
+		
 
 	}
 }
