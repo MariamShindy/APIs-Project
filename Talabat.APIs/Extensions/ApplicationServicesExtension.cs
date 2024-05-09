@@ -15,6 +15,7 @@ using Talabat.Infrastructure._Identity;
 using Talabat.Infrastructure.BasketRepository;
 using Talabat.Infrastructure.GenericRepoistory;
 using Talabat.Service.AuthService;
+using Talabat.Service.OrderService;
 
 namespace Talabat.APIs.Extensions
 {
@@ -22,6 +23,7 @@ namespace Talabat.APIs.Extensions
 	{
 		public static IServiceCollection AddApplicationsService(this IServiceCollection services)
 		{
+			services.AddScoped(typeof(IOrderService),typeof(OrderService));
 			services.AddScoped(typeof(IUnitOfWork), typeof(UnitOfWork));
 			services.AddScoped(typeof(IBasketRepository), typeof(BasketRepository));
 			services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
