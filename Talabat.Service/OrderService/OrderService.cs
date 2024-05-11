@@ -8,6 +8,7 @@ using Talabat.Core.Entities.OrderAggregate;
 using Talabat.Core.Entities.Product;
 using Talabat.Core.Repsitories.Contract;
 using Talabat.Core.Services.Contract;
+using Talabat.Core.Specifications.Order_Specs;
 
 namespace Talabat.Service.OrderService
 {
@@ -77,9 +78,12 @@ namespace Talabat.Service.OrderService
 		}
 
 
-		public Task<IReadOnlyList<Order>> GetOrdersForUserAsync(string buyerEmail)
+		public async Task<IReadOnlyList<Order>> GetOrdersForUserAsync(string buyerEmail)
 		{
-			throw new NotImplementedException();
+			var orderRepo = _unitOfWork.Repository<Order>();
+			var spec = new OrderSpecifications(buyerEmail);
+			var orders = await orderRepo.GetAllWithSpecAsync(spec);
+			return orders;
 		}
 	}
 }
