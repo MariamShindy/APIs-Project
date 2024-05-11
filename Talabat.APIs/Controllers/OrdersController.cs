@@ -15,8 +15,8 @@ namespace Talabat.APIs.Controllers
 		private readonly IOrderService _orderService;
 		private readonly IMapper _mapper;
 
-		public OrdersController(IOrderService orderService ,IMapper mapper)
-        {
+		public OrdersController(IOrderService orderService, IMapper mapper)
+		{
 			_orderService = orderService;
 			_mapper = mapper;
 		}
@@ -24,11 +24,11 @@ namespace Talabat.APIs.Controllers
 		//[ProducesResponseType(typeof(ApiResponse), StatusCodes.Status400BadRequest)]
 
 		[HttpPost]
-		public async Task<ActionResult<Order>> CreateOrder (OrderDto orderDto)
+		public async Task<ActionResult<Order>> CreateOrder(OrderDto orderDto)
 		{
 			var address = _mapper.Map<AddressDto, Address>(orderDto.ShippingAddress);
 			var order = await _orderService.CreateOrder(orderDto.BuyerEmail, orderDto.BasketId, orderDto.DeliveryMethodId, address);
-		    if(order is null)
+			if (order is null)
 			{
 				return BadRequest(new ApiResponse(400));
 			}
@@ -39,6 +39,17 @@ namespace Talabat.APIs.Controllers
 		{
 			var orders = await _orderService.GetOrdersForUserAsync(email);
 			return Ok(orders);
+		}
+
+		[HttpGet("{id}")]
+		[ProducesResponseType(typeof(Order),StatusCodes.Status200OK)]
+		[ProducesResponseType(typeof(ApiResponse), StatusCodes.Status404NotFound)]
+		public async Task<ActionResult<Order>> GetOrderForUser(string email ,int id)
+		{
+			var order = await _orderService.GetOrderByIdForUserAsync( email , id);
+			if (order is null)
+				return NotFound(new ApiResponse(404));
+			return Ok(order);
 		}
     }
 }
