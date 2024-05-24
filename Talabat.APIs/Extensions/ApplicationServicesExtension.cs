@@ -16,6 +16,7 @@ using Talabat.Infrastructure.BasketRepository;
 using Talabat.Infrastructure.GenericRepoistory;
 using Talabat.Service.AuthService;
 using Talabat.Service.OrderService;
+using Talabat.Service.ProductService;
 
 namespace Talabat.APIs.Extensions
 {
@@ -28,7 +29,7 @@ namespace Talabat.APIs.Extensions
 			services.AddScoped(typeof(IBasketRepository), typeof(BasketRepository));
 			services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
 			services.AddAutoMapper(typeof(MappingProfiles));
-
+			services.AddScoped(typeof(IProductService), typeof(ProductService));
 			services.Configure<ApiBehaviorOptions>(options =>
 			{
 				options.InvalidModelStateResponseFactory = (actionContext) =>
