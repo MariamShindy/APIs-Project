@@ -6,13 +6,17 @@ using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using Talabat.APIs.Errors;
 using Talabat.APIs.Helpers;
+using Talabat.Core;
 using Talabat.Core.Entities.Identity;
 using Talabat.Core.Repsitories.Contract;
 using Talabat.Core.Services.Contract;
+using Talabat.Infrastructure;
 using Talabat.Infrastructure._Identity;
 using Talabat.Infrastructure.BasketRepository;
 using Talabat.Infrastructure.GenericRepoistory;
 using Talabat.Service.AuthService;
+using Talabat.Service.OrderService;
+using Talabat.Service.ProductService;
 
 namespace Talabat.APIs.Extensions
 {
@@ -20,10 +24,12 @@ namespace Talabat.APIs.Extensions
 	{
 		public static IServiceCollection AddApplicationsService(this IServiceCollection services)
 		{
+			services.AddScoped(typeof(IOrderService),typeof(OrderService));
+			services.AddScoped(typeof(IUnitOfWork), typeof(UnitOfWork));
 			services.AddScoped(typeof(IBasketRepository), typeof(BasketRepository));
 			services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
 			services.AddAutoMapper(typeof(MappingProfiles));
-
+			services.AddScoped(typeof(IProductService), typeof(ProductService));
 			services.Configure<ApiBehaviorOptions>(options =>
 			{
 				options.InvalidModelStateResponseFactory = (actionContext) =>
