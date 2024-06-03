@@ -50,7 +50,7 @@ namespace Talabat.APIs.Controllers
 		[HttpGet("{id}")]
 		public async Task<ActionResult<ProductToReturnDto>> GetProduct(int id)
 		{
-			var spec = new ProductWithBrandAndCategorySpecifications(id);
+			//var spec = new ProductWithBrandAndCategorySpecifications(id);
 			var product = await _productService.GetProductAsync(id);
 			if (product is null)
 			{
