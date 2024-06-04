@@ -35,6 +35,8 @@ namespace Talabat.APIs.Controllers
 			//_brandsRepo = brandsRepo;
 			_mapper = mapper;
 		}
+
+		[CachedAttribute(600)]
 		//[Authorize/*(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)*/]
 		[HttpGet]
 		public async Task<ActionResult<Pagination<ProductToReturnDto>>> GetProducts([FromQuery]ProductSpecParams specParams)

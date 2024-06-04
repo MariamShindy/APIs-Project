@@ -20,14 +20,12 @@ namespace Talabat.Service.CacheService
 			var serializeOptions = new JsonSerializerOptions() { PropertyNamingPolicy = JsonNamingPolicy.CamelCase };
 			var serializedResponse = JsonSerializer.Serialize(Response , serializeOptions);
 			await _database.StringSetAsync(Key, serializedResponse, timeToLive);
-
 		}
 
 		public async Task<string?> GetCacheResponseAsync(string Key)
 		{
 			var response = await _database.StringGetAsync(Key);
 			if (response.IsNullOrEmpty) return null;
-
 			return response;
 		}
 	}
